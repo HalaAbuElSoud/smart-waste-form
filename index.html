@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BINZA Smart Bin Report</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <img src="binza-logo.png" class="logo" alt="Binza" />
+    <h2>Report a Bin Issue</h2>
+    <form id="reportForm">
+      <label for="binId">Bin Location / ID:</label>
+      <input type="text" id="binId" required />
+
+      <label for="issue">Issue Type:</labes>
+      <select id="issue" required>
+        <option value="">Select one</option>
+        <option value="Overflowing">Overflowing</option>
+        <option value="Broken">Broken</option>
+        <option value="Vandalized">Vandalized</option>
+        <option value="Smelly">Smelly</option>
+        <option value="Other">Other</option>
+      </select>
+      
+      <div id="otherIssueContainer" style="display:none;">
+  <label for="otherIssue">Describe the Issue:</label>
+  <textarea id="otherIssue" rows="3"></textarea>
+</div>
+
+
+      <div id="otherIssueContainer" style="display:none;">
+        <label for="otherIssue">Describe the Issue:</label>
+        <textarea id="otherIssue"></textarea>
+      </div>
+
+      <label for="severity">Severity:</label>
+      <select id="severity" required>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+
+      <label for="comments">Additional Comments:</label>
+      <textarea id="comments" rows="3"></textarea>
+
+      <label for="image">Upload Photo:</label>
+      <input type="file" id="image" accept="image/*" required />
+      <p class="note">Only images smaller than 1MB are supported.</p>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="confirmation">✅ Report submitted successfully!</div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
