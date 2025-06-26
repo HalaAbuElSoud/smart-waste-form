@@ -18,7 +18,7 @@
 <input type="hidden" id="binId" name="binId" required />
 
 
-      <label for="issue">Issue Type:</labes>
+      <label for="issue">Issue Type:</label>
       <select id="issue" required>
         <option value="">Select one</option>
         <option value="Overflowing">Overflowing</option>
@@ -27,17 +27,12 @@
         <option value="Smelly">Smelly</option>
         <option value="Other">Other</option>
       </select>
-      
+   
       <div id="otherIssueContainer" style="display:none;">
   <label for="otherIssue">Describe the Issue:</label>
-  <textarea id="otherIssue" rows="3"></textarea>
+  <textarea id="otherIssue" name="otherIssue" rows="3"></textarea>
 </div>
 
-
-      <div id="otherIssueContainer" style="display:none;">
-        <label for="otherIssue">Describe the Issue:</label>
-        <textarea id="otherIssue"></textarea>
-      </div>
 
       <label for="severity">Severity:</label>
       <select id="severity" required>
@@ -55,6 +50,20 @@
 
       <button type="submit">Submit</button>
     </form>
+    <div id="toast" style="
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2e7d32;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  display: none;
+  z-index: 9999;
+">Bin selected</div>
+
 
     <div id="confirmation" style="display: none;">
   <div style="
@@ -86,6 +95,7 @@
 </div>
 
  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+ <script src="https://unpkg.com/leaflet.smoothmarkerbouncing/leaflet.smoothmarkerbouncing.js"></script>
  <script type="module" src="script.js"></script>
 </body>
 </html>
