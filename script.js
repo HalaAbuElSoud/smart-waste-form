@@ -1,9 +1,9 @@
-
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 
-// Initialize default app (form app) only if not already initialized
+// Initialize default app (form app)
 let app;
 if (!getApps().length) {
   app = initializeApp({
@@ -21,7 +21,7 @@ if (!getApps().length) {
 }
 const db = getDatabase(app);
 
-// Initialize dashboard app with a custom name
+// Initialize dashboard app (bins data)
 const dashboardApp = initializeApp({
   apiKey: "AIzaSyDuqybZA8XIIzw01xjBd9qqRlRIoONzFRw",
   authDomain: "capstone-bb22d.firebaseapp.com",
@@ -33,53 +33,84 @@ const dashboardApp = initializeApp({
 }, "dashboardApp");
 const dashboardDb = getFirestore(dashboardApp);
 
-// Add map setup
+// Map setup
 const map = L.map('map').setView([24.7136, 46.6753], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(map);
 
+// Icons
+const defaultIcon = L.icon({
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+const selectedIcon = L.icon({
+  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+
+
+// Marker storage
+const markerMap = {};
+let selectedMarker = null;
+
+// Load bins
 async function loadBins() {
   const binsSnap = await getDocs(collection(dashboardDb, "waste_bins"));
   binsSnap.forEach((doc) => {
     const data = doc.data();
     if (data.location && data.location.lat && data.location.lng) {
-      const marker = L.marker([data.location.lat, data.location.lng]).addTo(map);
+      const marker = L.marker([data.location.lat, data.location.lng], { icon: defaultIcon }).addTo(map);
       marker.bindPopup(`
         <strong>Bin ID: ${data.bin_id || doc.id}</strong><br/>
         <button onclick="selectBin('${data.bin_id || doc.id}')">Select</button>
       `);
+      markerMap[data.bin_id || doc.id] = marker;
     }
   });
 }
 loadBins();
 
-// Fetch bins from Firebase and add markers
-const binsRef = ref(dashboardDb, 'bins');
-onValue(binsRef, (snapshot) => {
-  const bins = snapshot.val();
-  if (bins) {
-    for (const key in bins) {
-      const bin = bins[key];
-      const marker = L.marker([bin.lat, bin.lng]).addTo(map);
-      marker.bindPopup(`
-        <strong>${bin.name || 'Bin'}</strong><br />
-        <button onclick="selectBin('${key}')">Select</button>
-      `);
-    }
-  } else {
-    console.warn("No bins found in dashboard database.");
-  }
-});
+// Bin selection
+window.selectBin = function (binId) {
+  document.getElementById("binId").value = binId;
+ const toast = document.getElementById("toast");
+toast.innerText = `Selected bin: ${binId}`;
+toast.style.display = "block";
+setTimeout(() => {
+  toast.style.display = "none";
+}, 2500);
 
-window.selectBin = function(binId) {
-  document.getElementById('binId').value = binId;
-  alert("Selected bin: " + binId);
+
+  if (selectedMarker) {
+    selectedMarker.setIcon(defaultIcon);
+  }
+
+  selectedMarker = markerMap[binId];
+  if (selectedMarker) {
+    selectedMarker.setIcon(selectedIcon);
+
+// Make marker bounce
+if (selectedMarker.setBouncingOptions) {
+  selectedMarker.setBouncingOptions({ bounceHeight: 20, bounceSpeed: 54 });
+  selectedMarker.bounce(3); // bounce 3 times
+}
+
+  }
+
+  const label = document.getElementById("selectedBinText");
+  if (label) {
+    label.innerText = `Selected Bin: ${binId}`;
+  }
 };
 
+// Handle "Other" issue logic
 const issueSelect = document.getElementById("issue");
 const otherIssueContainer = document.getElementById("otherIssueContainer");
-
 issueSelect.addEventListener("change", () => {
   if (issueSelect.value === "Other") {
     otherIssueContainer.style.display = "block";
@@ -90,6 +121,7 @@ issueSelect.addEventListener("change", () => {
   }
 });
 
+// Submit form
 document.getElementById("reportForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -133,10 +165,7 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
       alert("There was an error submitting your report.");
     }
   };
-  window.selectBin = function(binId) {
-  document.getElementById("binId").value = binId;
-  alert("Selected bin: " + binId);
-};
 
   reader.readAsDataURL(imageFile);
 });
+
