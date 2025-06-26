@@ -34,7 +34,7 @@ const dashboardApp = initializeApp({
 const dashboardDb = getFirestore(dashboardApp);
 
 // Map setup
-const map = L.map('map').setView([24.7136, 46.6753], 13);
+const map = L.map('map').setView([25.2048, 55.2708], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(map);
@@ -67,7 +67,7 @@ async function loadBins() {
       const marker = L.marker([data.location.lat, data.location.lng], { icon: defaultIcon }).addTo(map);
       marker.bindPopup(`
         <strong>Bin ID: ${data.bin_id || doc.id}</strong><br/>
-        <button onclick="selectBin('${data.bin_id || doc.id}')">Select</button>
+        <button type="button" onclick="selectBin('${data.bin_id || doc.id}')">Select</button>
       `);
       markerMap[data.bin_id || doc.id] = marker;
     }
@@ -88,11 +88,25 @@ setTimeout(() => {
 
   if (selectedMarker) {
     selectedMarker.setIcon(defaultIcon);
+    // Reset previous marker's popup to show Select button
+    const prevBinId = Object.keys(markerMap).find(id => markerMap[id] === selectedMarker);
+    if (prevBinId) {
+      selectedMarker.bindPopup(`
+        <strong>Bin ID: ${prevBinId}</strong><br/>
+        <button type="button" onclick="selectBin('${prevBinId}')">Select</button>
+      `);
+    }
   }
 
   selectedMarker = markerMap[binId];
   if (selectedMarker) {
     selectedMarker.setIcon(selectedIcon);
+
+    // Update popup to show "Selected"
+    selectedMarker.bindPopup(`
+      <strong>Bin ID: ${binId}</strong><br/>
+      <span style="color: #2e7d32; font-weight: bold;">✓ Selected</span>
+    `);
 
 // Make marker bounce
 if (selectedMarker.setBouncingOptions) {
