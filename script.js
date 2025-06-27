@@ -38,6 +38,7 @@ const map = L.map('map').setView([25.2048, 55.2708], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(map);
+loadBins();
 
 // Icons
 const defaultIcon = L.icon({
@@ -75,20 +76,24 @@ async function loadBins() {
 }
 loadBins();
 
-// Bin selection
+// Bin selection handler
 window.selectBin = function (binId) {
   document.getElementById("binId").value = binId;
- const toast = document.getElementById("toast");
-toast.innerText = `Selected bin: ${binId}`;
-toast.style.display = "block";
-setTimeout(() => {
-  toast.style.display = "none";
-}, 2500);
 
+  // Show toast
+  const toast = document.getElementById("toast");
+  if (toast) {
+    toast.innerText = `Selected bin: ${binId}`;
+    toast.style.display = "block";
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 2500);
+  }
 
+  // Reset previous marker icon and popup
   if (selectedMarker) {
     selectedMarker.setIcon(defaultIcon);
-    // Reset previous marker's popup to show Select button
+
     const prevBinId = Object.keys(markerMap).find(id => markerMap[id] === selectedMarker);
     if (prevBinId) {
       selectedMarker.bindPopup(`
@@ -98,29 +103,31 @@ setTimeout(() => {
     }
   }
 
+  // Highlight selected marker
   selectedMarker = markerMap[binId];
   if (selectedMarker) {
     selectedMarker.setIcon(selectedIcon);
 
-    // Update popup to show "Selected"
     selectedMarker.bindPopup(`
-      <strong>Bin ID: ${binId}</strong><br/>
-      <span style="color: #2e7d32; font-weight: bold;">✓ Selected</span>
+      <strong>Bin ID: ${data.bin_id || doc.id}</strong><br/>
+      <button type="button" onclick="selectBin('${data.bin_id || doc.id}')">Select</button>
     `);
 
-// Make marker bounce
-if (selectedMarker.setBouncingOptions) {
-  selectedMarker.setBouncingOptions({ bounceHeight: 20, bounceSpeed: 54 });
-  selectedMarker.bounce(3); // bounce 3 times
-}
-
+    // Bounce marker if plugin is supported
+    if (selectedMarker.setBouncingOptions && selectedMarker.bounce) {
+      selectedMarker.setBouncingOptions({ bounceHeight: 20, bounceSpeed: 54 });
+      selectedMarker.bounce(3);
+    }
   }
 
+  // Update on-screen label
   const label = document.getElementById("selectedBinText");
   if (label) {
     label.innerText = `Selected Bin: ${binId}`;
   }
 };
+loadBins();
+
 
 // Handle "Other" issue logic
 const issueSelect = document.getElementById("issue");
@@ -139,6 +146,7 @@ issueSelect.addEventListener("change", () => {
 document.getElementById("reportForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
+  const email = document.getElementById("email").value;
   const binId = document.getElementById("binId").value;
   const issue = document.getElementById("issue").value;
   const severity = document.getElementById("severity").value;
@@ -168,14 +176,13 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
         severity,
         comments,
         imageBase64: base64Image,
-        email,
         timestamp: new Date().toISOString()
       });
 
       document.getElementById("reportForm").reset();
       document.getElementById("otherIssueContainer").style.display = "none";
-      window.location.href = "confirmation.html";
-
+      window.location.assign("confirmation.html");
+      
     } catch (error) {
       console.error("Submission failed:", error);
       alert("There was an error submitting your report.");
