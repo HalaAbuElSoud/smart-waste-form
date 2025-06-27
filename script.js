@@ -59,17 +59,7 @@ const selectedIcon = L.icon({
 const markerMap = {};
 let selectedMarker = null;
 
-const reportRef = push(ref(db, "reports"));
-await set(reportRef, {
-  binId,
-  issue,
-  otherDetails: issue === "Other" ? otherIssue : "",
-  severity,
-  comments,
-  imageBase64: base64Image,
-  email,
-  timestamp: new Date().toISOString()
-});
+
 
 
 // Load bins
@@ -187,6 +177,7 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
         severity,
         comments,
         imageBase64: base64Image,
+        email: email,
         timestamp: new Date().toISOString()
       });
 
