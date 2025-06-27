@@ -58,8 +58,8 @@ const selectedIcon = L.icon({
 // Marker storage
 const markerMap = {};
 let selectedMarker = null;
-const email = document.getElementById("email").value;
 
+const reportRef = push(ref(db, "reports"));
 await set(reportRef, {
   binId,
   issue,
@@ -152,7 +152,8 @@ issueSelect.addEventListener("change", () => {
 // Submit form
 document.getElementById("reportForm").addEventListener("submit", function (e) {
   e.preventDefault();
-
+  
+  const email = document.getElementById("email").value;
   const binId = document.getElementById("binId").value;
   const issue = document.getElementById("issue").value;
   const severity = document.getElementById("severity").value;
