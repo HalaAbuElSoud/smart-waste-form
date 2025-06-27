@@ -117,20 +117,5 @@
  <script src="https://unpkg.com/leaflet.smoothmarkerbouncing/leaflet.smoothmarkerbouncing.js"></script>
  <script type="module" src="script.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-  emailjs.init("-Xr6dFMz3d3TSN32x"); 
-  
-  document.getElementById("reportForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // FIRST: send the email
-    emailjs.sendForm("service_b2f3xjh", "template_mbb8nnb", this)
-      .then(() => {
-        console.log("Email sent successfully!");
-      }, (error) => {
-        console.error("Email failed:", error);
-      });
-
-</script>
 </body>
 </html>
