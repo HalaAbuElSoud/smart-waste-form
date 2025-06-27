@@ -38,7 +38,6 @@ const map = L.map('map').setView([25.2048, 55.2708], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(map);
-loadBins();
 
 // Icons
 const defaultIcon = L.icon({
@@ -109,8 +108,8 @@ window.selectBin = function (binId) {
     selectedMarker.setIcon(selectedIcon);
 
     selectedMarker.bindPopup(`
-      <strong>Bin ID: ${data.bin_id || doc.id}</strong><br/>
-      <button type="button" onclick="selectBin('${data.bin_id || doc.id}')">Select</button>
+      <strong>Bin ID: ${binId}</strong><br/>
+      <span style="color: #2e7d32; font-weight: bold;">✓ Selected</span>
     `);
 
     // Bounce marker if plugin is supported
@@ -126,6 +125,8 @@ window.selectBin = function (binId) {
     label.innerText = `Selected Bin: ${binId}`;
   }
 };
+
+// Load bins after defining the function
 loadBins();
 
 
@@ -153,7 +154,6 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
   const comments = document.getElementById("comments").value;
   const imageFile = document.getElementById("image").files[0];
   const otherIssue = document.getElementById("otherIssue")?.value || "";
-  const email = document.getElementById("email").value;
 
   if (!imageFile) {
     alert("Please upload an image.");
@@ -176,6 +176,7 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
         severity,
         comments,
         imageBase64: base64Image,
+        email,
         timestamp: new Date().toISOString()
       });
 
