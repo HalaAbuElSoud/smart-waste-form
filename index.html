@@ -13,8 +13,11 @@
     <img src="binza-logo 1.svg" class="logo" alt="Binza" />
     <h2>Report a Bin Issue</h2>
     <form id="reportForm">
+      <label for="to_name">Your Name:</label>
+      <input type="text" name="to_name" placeholder="Your Name" required />
+
       <label for="email">Your Email:</label>
-      <input type="email" id="email" name="email" required />
+      <input type="email" name="to_email" placeholder="Your Email" required />
       
       <label>Select Bin Location:</label>
 <div id="map" style="height: 300px; border-radius: 8px; margin-bottom: 15px;"></div>
@@ -116,6 +119,18 @@
  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
   emailjs.init("-Xr6dFMz3d3TSN32x"); 
+  
+  document.getElementById("reportForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // FIRST: send the email
+    emailjs.sendForm("service_b2f3xjh", "template_mbb8nnb", this)
+      .then(() => {
+        console.log("Email sent successfully!");
+      }, (error) => {
+        console.error("Email failed:", error);
+      });
+
 </script>
 </body>
-</html>
+</html> 
