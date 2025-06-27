@@ -11,7 +11,7 @@ emailjs.init("-Xr6dFMz3d3TSN32x"); // Your Public Key
 let app;
 if (!getApps().length) {
   app = initializeApp({
-    apiKey: "AIzaSyCN0douQFost_MgeTuq0yTAXAL-P3ychwc",
+    apiKey: "AIzaSyCtLvC8ubJgurJhvs3BLaIBXwkYj5Z6Zao",
     authDomain: "swm-form.firebaseapp.com",
     databaseURL: "https://swm-form-default-rtdb.firebaseio.com",
     projectId: "swm-form",
