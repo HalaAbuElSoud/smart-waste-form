@@ -192,8 +192,8 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
 
       document.getElementById("reportForm").reset();
       document.getElementById("otherIssueContainer").style.display = "none";
-      window.location.href = "confirmation.html";
-
+      window.location.assign("confirmation.html");
+      
     } catch (error) {
       console.error("Submission failed:", error);
       alert("There was an error submitting your report.");
