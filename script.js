@@ -38,6 +38,7 @@ const map = L.map('map').setView([25.2048, 55.2708], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(map);
+loadBins();
 
 // Icons
 const defaultIcon = L.icon({
