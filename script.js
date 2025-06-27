@@ -57,19 +57,6 @@ const selectedIcon = L.icon({
 // Marker storage
 const markerMap = {};
 let selectedMarker = null;
-const email = document.getElementById("email").value;
-// ...
-await set(reportRef, {
-  binId,
-  issue,
-  otherDetails: issue === "Other" ? otherIssue : "",
-  severity,
-  comments,
-  imageBase64: base64Image,
-  email,
-  timestamp: new Date().toISOString()
-});
-
 
 // Load bins
 async function loadBins() {
@@ -158,6 +145,7 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
   const comments = document.getElementById("comments").value;
   const imageFile = document.getElementById("image").files[0];
   const otherIssue = document.getElementById("otherIssue")?.value || "";
+  const email = document.getElementById("email").value;
 
   if (!imageFile) {
     alert("Please upload an image.");
@@ -180,6 +168,7 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
         severity,
         comments,
         imageBase64: base64Image,
+        email,
         timestamp: new Date().toISOString()
       });
 
