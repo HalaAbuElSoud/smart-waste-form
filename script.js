@@ -57,6 +57,19 @@ const selectedIcon = L.icon({
 // Marker storage
 const markerMap = {};
 let selectedMarker = null;
+const email = document.getElementById("email").value;
+// ...
+await set(reportRef, {
+  binId,
+  issue,
+  otherDetails: issue === "Other" ? otherIssue : "",
+  severity,
+  comments,
+  imageBase64: base64Image,
+  email,
+  timestamp: new Date().toISOString()
+});
+
 
 // Load bins
 async function loadBins() {
