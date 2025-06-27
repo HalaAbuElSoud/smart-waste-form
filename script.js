@@ -168,8 +168,6 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
   if (!confirmSubmit) return;
 
   const reader = new FileReader();
-  const reportRef = push(ref(db, "reports"));
-
   reader.onloadend = async function () {
     const base64Image = reader.result;
 
