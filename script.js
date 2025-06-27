@@ -58,7 +58,7 @@ const selectedIcon = L.icon({
 const markerMap = {};
 let selectedMarker = null;
 const email = document.getElementById("email").value;
-// ...
+
 await set(reportRef, {
   binId,
   issue,
@@ -168,6 +168,8 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
   if (!confirmSubmit) return;
 
   const reader = new FileReader();
+  const reportRef = push(ref(db, "reports"));
+
   reader.onloadend = async function () {
     const base64Image = reader.result;
 
