@@ -170,26 +170,38 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
     const base64Image = reader.result;
 
     try {
-      const reportRef = push(ref(db, "reports"));
-      await set(reportRef, {
-        binId,
-        issue,
-        otherDetails: issue === "Other" ? otherIssue : "",
-        severity,
-        comments,
-        imageBase64: base64Image,
-        email: email,
-        timestamp: new Date().toISOString()
-      });
+  const reportRef = push(ref(db, "reports"));
+  await set(reportRef, {
+    binId,
+    issue,
+    otherDetails: issue === "Other" ? otherIssue : "",
+    severity,
+    comments,
+    imageBase64: base64Image,
+    email,
+    timestamp: new Date().toISOString()
+  });
 
-      document.getElementById("reportForm").reset();
-      document.getElementById("otherIssueContainer").style.display = "none";
-      window.location.assign("confirmation.html");
-      
-    } catch (error) {
-      console.error("Submission failed:", error);
-      alert("There was an error submitting your report.");
-    }
+  // Send email via EmailJS
+  emailjs.send("service_b2f3xjh", "template_mbb8nnb", {
+    to_email: email,
+    bin_id: binId,
+    issue_type: issue,
+    severity_level: severity,
+    comments: comments || "No additional comments",
+  }).then(() => {
+    console.log("Confirmation email sent!");
+  }).catch((emailError) => {
+    console.error("Email sending failed:", emailError);
+  });
+
+  document.getElementById("reportForm").reset();
+  document.getElementById("otherIssueContainer").style.display = "none";
+  window.location.assign("confirmation.html");
+} catch (error) {
+  console.error("Submission failed:", error);
+  alert("There was an error submitting your report.");
+}
   };
 
   reader.readAsDataURL(imageFile);
