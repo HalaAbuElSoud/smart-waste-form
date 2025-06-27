@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // EmailJS confirmation
-        await emailjs.send("service_b2f3xjh", "template_mbb8nnb", {
+        await emailjs.send("service_b2f3xjh", "template_ylvie5j", {
           to_email: email,
           to_name: name,
           bin_id: binId,
