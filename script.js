@@ -3,9 +3,7 @@ import 'https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.js';
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
-import emailjs from "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
 
-// Initialize EmailJS
 emailjs.init("-Xr6dFMz3d3TSN32x");
 
 // Firebase App (form)
