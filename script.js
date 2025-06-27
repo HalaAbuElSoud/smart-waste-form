@@ -112,8 +112,8 @@ window.selectBin = function (binId) {
     selectedMarker.setIcon(selectedIcon);
 
     selectedMarker.bindPopup(`
-      <strong>Bin ID: ${binId}</strong><br/>
-      <span style="color: #2e7d32; font-weight: bold;">✓ Selected</span>
+      <strong>Bin ID: ${data.bin_id || doc.id}</strong><br/>
+      <button type="button" onclick="selectBin('${data.bin_id || doc.id}')">Select</button>
     `);
 
     // Bounce marker if plugin is supported
@@ -129,6 +129,7 @@ window.selectBin = function (binId) {
     label.innerText = `Selected Bin: ${binId}`;
   }
 };
+loadBins();
 
 
 // Handle "Other" issue logic
