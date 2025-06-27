@@ -114,6 +114,13 @@ document.addEventListener("DOMContentLoaded", () => {
           name,
           timestamp: new Date().toISOString()
         });
+        console.log("Sending EmailJS payload:", {
+      to_email: email,
+      bin_id: binId,
+      issue_type: issue,
+      severity_level: severity,
+      comments: comments || "No comments"
+    });
 
         // EmailJS confirmation
         await emailjs.send("service_b2f3xjh", "template_ylvie5j", {
