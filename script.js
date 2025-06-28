@@ -87,20 +87,21 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     const form = document.getElementById("reportForm");
-    const submitBtn = document.getElementById("submitBtn");
+    const submitBtn = document.querySelector("#reportForm button[type='submit']");
+    let submitting = false;
+    
+    if (submitting) return; // prevent multiple clicks
+      submitting = true;
+
+    
     const binId = document.getElementById("binId").value;
-    if (!binId) {
-    e.preventDefault();
     const toast = document.getElementById("toast");
     toast.textContent = "Please select a bin on the map before submitting.";
     toast.style.display = "block";
     setTimeout(() => { toast.style.display = "none"; }, 3000);
     return false;
   }
-   // Disable submit button to prevent multiple clicks
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting...";
-    
+
     const issue = document.getElementById("issue").value;
     const severity = document.getElementById("severity").value;
     const comments = document.getElementById("comments").value;
@@ -108,6 +109,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const name = document.querySelector("input[name='to_name']").value;
     const otherIssue = document.getElementById("otherIssue")?.value || "";
     const imageFile = document.getElementById("image").files[0];
+ 
+    if (!binId) {
+    alert("Please select a bin on the map.");
+    submitting = false;
+    return;
+  }
+
 
     if (!imageFile) return alert("Please upload an image.");
 
@@ -145,6 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
           severity_level: severity,
           comments: comments || "No additional comments"
         });
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+
 
         window.location.assign("confirmation.html");
       } catch (err) {
