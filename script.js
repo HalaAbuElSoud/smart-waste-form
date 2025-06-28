@@ -86,7 +86,21 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("reportForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
+    const form = document.getElementById("reportForm");
+    const submitBtn = document.getElementById("submitBtn");
     const binId = document.getElementById("binId").value;
+    if (!binId) {
+    e.preventDefault();
+    const toast = document.getElementById("toast");
+    toast.textContent = "Please select a bin on the map before submitting.";
+    toast.style.display = "block";
+    setTimeout(() => { toast.style.display = "none"; }, 3000);
+    return false;
+  }
+   // Disable submit button to prevent multiple clicks
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+    
     const issue = document.getElementById("issue").value;
     const severity = document.getElementById("severity").value;
     const comments = document.getElementById("comments").value;
