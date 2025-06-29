@@ -182,4 +182,4 @@ async function loadBins(map) {
       markerMap[data.bin_id || doc.id] = marker;
     }
   });
-}
+
