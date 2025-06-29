@@ -84,86 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Submit form
   document.getElementById("reportForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const form = document.getElementById("reportForm");
-    const submitBtn = document.querySelector("#reportForm button[type='submit']");
-    let submitting = false;
-    
-    if (submitting) return; // prevent multiple clicks
-      submitting = true;
-
-    
-    const binId = document.getElementById("binId").value;
-    const toast = document.getElementById("toast");
-    toast.textContent = "Please select a bin on the map before submitting.";
-    toast.style.display = "block";
-    setTimeout(() => { toast.style.display = "none"; }, 3000);
-    return false;
-  }
-
-    const issue = document.getElementById("issue").value;
-    const severity = document.getElementById("severity").value;
-    const comments = document.getElementById("comments").value;
-    const email = document.querySelector("input[name='to_email']").value;
-    const name = document.querySelector("input[name='to_name']").value;
-    const otherIssue = document.getElementById("otherIssue")?.value || "";
-    const imageFile = document.getElementById("image").files[0];
- 
-    if (!binId) {
-    alert("Please select a bin on the map.");
-    submitting = false;
-    return;
-  }
-
-
-    if (!imageFile) return alert("Please upload an image.");
-
-    const reader = new FileReader();
-    reader.onloadend = async function () {
-      const base64Image = reader.result;
-
-      try {
-        const reportRef = push(ref(db, "reports"));
-        await set(reportRef, {
-          binId,
-          issue,
-          otherDetails: issue === "Other" ? otherIssue : "",
-          severity,
-          comments,
-          imageBase64: base64Image,
-          email,
-          name,
-          timestamp: new Date().toISOString()
-        });
-        console.log("Sending EmailJS payload:", {
-      to_email: email,
-      bin_id: binId,
-      issue_type: issue,
-      severity_level: severity,
-      comments: comments || "No comments"
-    });
-
-        // EmailJS confirmation
-        await emailjs.send("service_b2f3xjh", "template_t8abxca", {
-          to_email: email,
-          to_name: name,
-          bin_id: binId,
-          issue_type: issue,
-          severity_level: severity,
-          comments: comments || "No additional comments"
-        });
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Submitting...";
-
-
-        window.location.assign("confirmation.html");
-      } catch (err) {
-        console.error("Submission failed:", err);
-        alert("Something went wrong. Please try again.");
-      }
-    }
-  document.getElementById("reportForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const form = document.getElementById("reportForm");
@@ -181,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toast.style.display = "block";
     setTimeout(() => { toast.style.display = "none"; }, 3000);
     submitting = false;
-    return;  // 
+    return;  
   }
 
   const issue = document.getElementById("issue").value;
