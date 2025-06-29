@@ -166,7 +166,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     reader.readAsDataURL(imageFile);
   });
-});
 
 // Load bins from Firestore
 async function loadBins(map) {
@@ -182,4 +181,4 @@ async function loadBins(map) {
       markerMap[data.bin_id || doc.id] = marker;
     }
   });
-
+}
