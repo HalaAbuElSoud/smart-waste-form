@@ -21,6 +21,7 @@ if (!getApps().length) {
 } else {
   app = getApps()[0];
 }
+
 const db = getDatabase(app);
 
 // Firebase App (dashboard)
@@ -86,12 +87,12 @@ document.addEventListener("DOMContentLoaded", () => {
  document.getElementById("reportForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
+
   const form = document.getElementById("reportForm");
   const submitBtn = document.querySelector("#reportForm button[type='submit']");
-  let submitting = false;
-
-  if (submitting) return; // prevent multiple clicks
-  submitting = true;
+  // Disable the button and show submitting immediately
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
 
   const binId = document.getElementById("binId").value;
   const toast = document.getElementById("toast");
@@ -100,7 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
     toast.textContent = "Please select a bin on the map before submitting.";
     toast.style.display = "block";
     setTimeout(() => { toast.style.display = "none"; }, 3000);
-    submitting = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit";
     return;
   }
 
@@ -167,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
   reader.readAsDataURL(imageFile);
 });
  
-
 // Load bins from Firestore
 async function loadBins(map) {
   const binsSnap = await getDocs(collection(dashboardDb, "waste_bins"));
@@ -183,3 +184,4 @@ async function loadBins(map) {
     }
   });
 }
+});
