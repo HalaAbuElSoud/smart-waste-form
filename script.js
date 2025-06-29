@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Submit form
-  document.getElementById("reportForm").addEventListener("submit", async function (e) {
+ document.getElementById("reportForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const form = document.getElementById("reportForm");
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toast.style.display = "block";
     setTimeout(() => { toast.style.display = "none"; }, 3000);
     submitting = false;
-    return;  
+    return;
   }
 
   const issue = document.getElementById("issue").value;
@@ -165,7 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   reader.readAsDataURL(imageFile);
-});  
+});
+ 
 
 // Load bins from Firestore
 async function loadBins(map) {
